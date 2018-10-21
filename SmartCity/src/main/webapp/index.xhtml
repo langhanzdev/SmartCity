@@ -1,12 +1,24 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:pe="http://primefaces.org/ui/extensions">
     <h:head>
         <title>Smart City Control</title>
-        <h:outputStylesheet name="https://openlayers.org/en/v5.2.0/css/ol.css"/>
+        
+        <link src="https://openlayers.org/en/v5.2.0/css/ol.css" type="text/css"/>
         <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
         <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+        
+        <h:outputStylesheet name="/css/default.css"/>
+        <h:outputStylesheet name="/css/cssLayout.css"/>
+        <h:outputStylesheet name="/css/OpenLayersStyle.css"/>
+        <h:outputStylesheet name="/css/custom.css"/> 
+        <h:outputStylesheet name="/css/bootstrap.css"/> 
         <style type="text/css">
       html, body, #basicMap {
           width: 100%;
@@ -14,9 +26,10 @@
           margin: 0;
       }
     </style>
-    <h:outputStylesheet name="OpenLayersStyle.css"/>
+    <h:outputStylesheet name="css/OpenLayersStyle.css"/>
     <script src="OpenLayers.js"></script>
-    <script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
         
     function init() {
           
@@ -55,35 +68,80 @@
 //            new OpenLayers.Geometry.Point(parseFloat(-51.19,-30.05)).transform(fromProjection, toProjection)
 //            
 //        );
-map.addLayer(mapnik);
+        map.addLayer(mapnik);
+
 
 
         var markers = new OpenLayers.Layer.Markers( "Markers" );
-map.addLayer(markers);
+        map.addLayer(markers);
             
-        var lonLat = new OpenLayers.LonLat( -51.19,-30.05 )
-          .transform(
+        var lonLat = new OpenLayers.LonLat( -51.19,-30.05 ).transform(
             new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
             map.getProjectionObject() // to Spherical Mercator Projection
           );
-            var size = new OpenLayers.Size(21,25);
-            var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-            var icon = new OpenLayers.Icon('javax.faces.resource/img/icon.png.xhtml', size, offset);  
+        var size = new OpenLayers.Size(21,25);
+        var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+        var icon = new OpenLayers.Icon('javax.faces.resource/img/icon.png.xhtml', size, offset);  
             
-            markers.addMarker(new OpenLayers.Marker(lonLat,icon));
+         //   markers.addMarker(new OpenLayers.Marker(lonLat,icon));
             //markers.addMarker(new OpenLayers.Marker(lonLat,icon.clone()));
 //        vectorLayer.addFeatures(feature);
 //        map.addLayer(vectorLayer);
-        
+         
         
         
         //markers.addMarker(new OpenLayers.Marker(lonLat));
         
         map.setCenter(position, zoom );
+        map.addLayer(vectorLayer);
+        var point = new OpenLayers.Geometry.Point( -51.19,-30.05);
+var style =  {
+    externalGraphic: 'http://www.openlayers.org/dev/img/marker.png',
+    graphicWidth: 21,
+    graphicHeight: 25,
+    graphicYOffset: -24
+};
+var pointFeature = new OpenLayers.Feature.Vector(point, null, style);
+        vectorLayer.addFeatures(pointFeature);
+        var s = "";
+                $.get('devices', {action: 0}, function (responseText) {
+
+                    $.each(responseText, function (index, item) { // Iterate over the JSON array.
+                        alert(index);
+                        var feature = new OpenLayers.Feature.Vector(
+                            new OpenLayers.Geometry.Point(parseFloat(item['longitude']), parseFloat(item['latitude'])).transform(fromProjection, toProjection)
+                        );
+                        
+                        vectorLayer.addFeatures(feature);
+                    });
+                });
+        
+        
+        
       }
     </script>
     </h:head>
     <h:body onload="init();">
+        
+        <h:form style="width: 100%;height: 100%;"   prependId="false">  
+            <p:growl id="messages" showDetail="true" sticky="true" life="3000"/>  
+            <p:menubar >
+
+                <p:menuitem value="Situation Control" url="/index.xhtml" icon="ui-icon-home" />
+                
+                
+                <f:facet name="options">
+                    <h:graphicImage id="logoH" style="height: 25px;margin-bottom: 0; margin-top: 2px;margin-right: 600px;" name="/img/HuaweiLogo.png"/> 
+                    <h:graphicImage id="loader" style="display: none;height: 19px;padding-bottom: 6px;margin-bottom: 0; margin-top: 2px;margin-right: 615px;" name="/img/HuaweiLoader.gif"/> 
+
+                    <p:inputText style="margin-right:10px" placeholder="Search"/>
+                    <p:commandButton type="button" value="Logout" icon="ui-icon-extlink" /> 
+
+                </f:facet>
+
+            </p:menubar>
+
+        </h:form>
         
     <div id="basicMap"></div>
   
