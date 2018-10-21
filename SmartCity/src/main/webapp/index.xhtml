@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Smart City Control</title>
+        <h:outputStylesheet name="https://openlayers.org/en/v5.2.0/css/ol.css"/>
+        <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+        <style type="text/css">
+      html, body, #basicMap {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+      }
+    </style>
+    <h:outputStylesheet name="OpenLayersStyle.css"/>
+    <script src="OpenLayers.js"></script>
+    <script>
+        
+    function init() {
+          
+        var projection = new OpenLayers.Projection("EPSG:900913");
+        var displayProjection = new OpenLayers.Projection("EPSG:4326");
+        var options = {
+                   // projection: projection,
+//                    displayProjection: displayProjection,
+                    units: "m",
+                    maxResolution: 156543.0339,
+                    maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
+                            20037508.34, 20037508.34),
+                    crossOriginKeyword: null,
+                    numZoomLevels: 19,
+                    controls: [
+                        new OpenLayers.Control.Navigation(),
+                        //new OpenLayers.Control.PanZoomBar(),
+                        new OpenLayers.Control.Permalink(),
+                        new OpenLayers.Control.ScaleLine(),
+                        //new OpenLayers.Control.SelectFeature(),
+                        new OpenLayers.Control.MousePosition({}),
+                        new OpenLayers.Control.KeyboardDefaults()
+                    ]
+                };
+             
+        map = new OpenLayers.Map("basicMap", options);
+        var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+        
+        var mapnik         = new OpenLayers.Layer.OSM();
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position       = new OpenLayers.LonLat(-51.19,-30.05).transform( fromProjection, toProjection);
+        var zoom           = 15; 
+        
+//        var feature = new OpenLayers.Feature.Vector(
+//            new OpenLayers.Geometry.Point(parseFloat(-51.19,-30.05)).transform(fromProjection, toProjection)
+//            
+//        );
+map.addLayer(mapnik);
+
+
+        var markers = new OpenLayers.Layer.Markers( "Markers" );
+map.addLayer(markers);
+            
+        var lonLat = new OpenLayers.LonLat( -51.19,-30.05 )
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            map.getProjectionObject() // to Spherical Mercator Projection
+          );
+            var size = new OpenLayers.Size(21,25);
+            var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+            var icon = new OpenLayers.Icon('javax.faces.resource/img/icon.png.xhtml', size, offset);  
+            
+            markers.addMarker(new OpenLayers.Marker(lonLat,icon));
+            //markers.addMarker(new OpenLayers.Marker(lonLat,icon.clone()));
+//        vectorLayer.addFeatures(feature);
+//        map.addLayer(vectorLayer);
+        
+        
+        
+        //markers.addMarker(new OpenLayers.Marker(lonLat));
+        
+        map.setCenter(position, zoom );
+      }
+    </script>
+    </h:head>
+    <h:body onload="init();">
+        
+    <div id="basicMap"></div>
+  
+    </h:body>
+</html>
+

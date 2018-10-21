@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="https://openlayers.org/en/v5.2.0/css/ol.css"/>
+        <!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="OpenLayers.js"></script>
+    </h:head>
+    <h:body>
+        <div id="map" class="map"></div>
+    <script>
+      import Feature from "./ol/Feature.js";
+      import Map from './ol/Map.js';
+      import View from './ol/View.js';
+      import Point from './ol/geom/Point.js';
+      import {Tile as TileLayer, Vector as VectorLayer} from './ol/layer.js';
+      import {fromLonLat} from './ol/proj.js';
+      import TileJSON from './ol/source/TileJSON.js';
+      import VectorSource from './ol/source/Vector.js';
+      import {Icon, Style} from './ol/style.js';
+
+
+      var rome = new Feature({
+        geometry: new Point(fromLonLat([12.5, 41.9]))
+      });
+
+      var london = new Feature({
+        geometry: new Point(fromLonLat([-0.12755, 51.507222]))
+      });
+
+      var madrid = new Feature({
+        geometry: new Point(fromLonLat([-3.683333, 40.4]))
+      });
+
+      rome.setStyle(new Style({
+        image: new Icon(/** @type {module:ol/style/Icon~Options} */ ({
+          color: '#8959A8',
+          crossOrigin: 'anonymous',
+          src: 'data/dot.png'
+        }))
+      }));
+
+      london.setStyle(new Style({
+        image: new Icon(/** @type {module:ol/style/Icon~Options} */ ({
+          color: '#4271AE',
+          crossOrigin: 'anonymous',
+          src: 'data/dot.png'
+        }))
+      }));
+
+      madrid.setStyle(new Style({
+        image: new Icon(/** @type {module:ol/style/Icon~Options} */ ({
+          color: [113, 140, 0],
+          crossOrigin: 'anonymous',
+          src: 'data/dot.png'
+        }))
+      }));
+
+
+      var vectorSource = new VectorSource({
+        features: [rome, london, madrid]
+      });
+
+      var vectorLayer = new VectorLayer({
+        source: vectorSource
+      });
+
+      var rasterLayer = new TileLayer({
+        source: new TileJSON({
+          url: 'https://api.tiles.mapbox.com/v3/mapbox.geography-class.json?secure',
+          crossOrigin: ''
+        })
+      });
+
+      var map = new Map({
+        layers: [rasterLayer, vectorLayer],
+        target: document.getElementById('map'),
+        view: new View({
+          center: fromLonLat([2.896372, 44.60240]),
+          zoom: 3
+        })
+      });
+    </script>
+    </h:body>
+</html>
+
