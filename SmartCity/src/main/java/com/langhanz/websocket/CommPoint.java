@@ -40,7 +40,7 @@ public class CommPoint {
     @OnOpen
     public void onOpen(Session session) throws IOException {
         
-        System.out.println("[CommPoint onOpen: " + session.getId());
+        System.out.println("[APP][CommPoint onOpen: " + session.getId());
         tryConnect(session);
     }
     
@@ -53,17 +53,17 @@ public class CommPoint {
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
         
-        Session client = mid.getSession("001");
+        Session client = mid.getSession(1);
         
         if(client == null && !tryConnect(session)) 
             return;     
         
         if(!session.equals(client)){
-            System.out.println("[CommPoint onMessage: Invalid client.");
+            System.out.println("[APP][CommPoint onMessage: Invalid client.");
             return;
         }
         
-        System.out.println("[CommPoint onMessage: " + message);      
+        System.out.println("[APP][CommPoint onMessage: " + message);      
         mid.registerEvent(message);
                
     }
@@ -75,7 +75,7 @@ public class CommPoint {
      */
     @OnError
     public void onError(Session session, Throwable t) {
-        System.out.println("Error in WebSocket communication: " + t.getMessage());       
+        System.out.println("[APP] Error in WebSocket communication: " + t.getMessage());       
     }
     
     /**
@@ -86,7 +86,7 @@ public class CommPoint {
     @OnClose
     public void onClose (Session session, CloseReason reason) {
         
-        System.out.println("Client disconnected...:" + reason.getReasonPhrase());
+        System.out.println("[APP]Client disconnected...:" + reason.getReasonPhrase());
         
         mid.unregisterClient(session);
         
@@ -97,15 +97,15 @@ public class CommPoint {
      * @param sm Command string to be sends.
      * @throws IOException 
      */
-    public void sendMessage(@Observes @Any StrMessage sm) throws IOException {
+    public void sendMessage(@Observes @Any String sm) throws IOException {
         
-        Session cSession = mid.getSession("001");
+        Session cSession = mid.getSession(1);
         
         if (cSession != null) {
-            System.out.println("SEND TO CLIENT: " + sm + " " + cSession.getId());        
+            System.out.println("[APP] SEND TO MIDDLEWARE: " + sm + " " + cSession.getId());        
             cSession.getBasicRemote().sendText(sm.toString());          
         }else{ 
-            System.out.println("SEND | CLIENT " + sm + " IS NOT ACTIVE!" );
+            System.out.println("[APP] SEND | MIDDLEWARE " + sm + " IS NOT ACTIVE!" );
         }
     }
  
@@ -117,11 +117,12 @@ public class CommPoint {
      */
     private boolean tryConnect(Session session) throws IOException{
         if(mid.registerNewClient(session)){
-            System.out.println("[CommPoint onOpen: Successfully added client.");
+            System.out.println("[APP][CommPoint onOpen: Successfully added client.");
             return true;
         }else{
-            System.out.println("[CommPoint onOpen: New client not added.");
-            session.getBasicRemote().sendText("Connection refused: There is already a connected client.");
+            System.out.println("[APP][CommPoint onOpen: New client not added.");
+            
+            session.getBasicRemote().sendText("[APP]Connection refused: There is already a connected client.");
         }
         return false;
     }

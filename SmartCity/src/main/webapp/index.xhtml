@@ -129,12 +129,15 @@ var pointFeature = new OpenLayers.Feature.Vector(point, null, style);
     </script>
     </h:head>
     <h:body onload="init();">
+       
         <div id="basicMap"></div>
         <h:form style="width: 100%;"   prependId="false">  
+            
             <p:growl id="messages" showDetail="true" sticky="true" life="3000"/>  
             <p:menubar >
 
                 <p:menuitem value="Situation Control" url="/index.xhtml" icon="ui-icon-home" />
+                
                 
                 
                 <f:facet name="options">
@@ -147,7 +150,7 @@ var pointFeature = new OpenLayers.Feature.Vector(point, null, style);
                 </f:facet>
 
             </p:menubar>
-
+            <p:button  onclick="#{mapController.sendMessage()}"  value="AQUI"/>
         </h:form>
         
         <div id="infoBar"></div>

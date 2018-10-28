@@ -31,11 +31,11 @@ public class Connector {
      */
     @PostConstruct
     public void start()  {
-        System.out.println("AQUIII");
+        System.out.println("[Middleware] AQUIII");
         
         WSClient wsClient = new WSClient();
         try {
-            System.out.println("Try connect...");
+            System.out.println("[Middleware] Try connect...");
 ////            wsClient.connect(new URI("ws://192.168.160.6:8080/cosvc/cp1"));
             wsClient.connect(new URI("ws://localhost:8080/SmartCity-1.0-SNAPSHOT/cp1"));
         } catch (URISyntaxException ex) {

@@ -25,14 +25,14 @@ public class WSCE1 {
     @OnOpen
     public void onOpen(Session session) throws IOException {
         
-       System.out.println("Client connected...:" + session.getId());
+       System.out.println("[Middleware] Client connected...:" + session.getId());
         
     }
     
     @OnMessage
     public String onMessage(Session session, String message) {
         
-        System.out.println("Message received: " + message);
+        System.out.println("[Middleware] Message received: " + message);
         
         return null;
     }
@@ -46,7 +46,7 @@ public class WSCE1 {
     @OnClose
     public void onClose (Session session, CloseReason reason) {
         
-        System.out.println("Client disconnected...:" + reason.getReasonPhrase());
+        System.out.println("[Middleware] Client disconnected...:" + reason.getReasonPhrase());
         
     }
     

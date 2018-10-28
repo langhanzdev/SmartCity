@@ -41,15 +41,15 @@ public class Middleman {
         
         ids++;
         Integer naturalId = ids; 
-        System.out.println("[Middleman - register new client] - wsId: "+wsId + " naturalId: " + naturalId );
+        System.out.println("[APP][Middleman - register new client] - wsId: "+wsId + " naturalId: " + naturalId );
         
-        if(clientList.size() < 100){
+        if(clientList.size() < 100){ //Maximo 100 Middlewares conectados.
             clientList.put(naturalId, wsId);
-            System.out.println("[Middleman - clientList] : " + clientList.size());
+            System.out.println("[APP][Middleman - clientList] : " + clientList.size());
             return true;
         }
         
-        System.out.println("[Middleman - clientList] : Client connection refused! Only one client is allowed at a time.");
+        System.out.println("[APP][Middleman - clientList] : Client connection refused! Only one client is allowed at a time.");
         return false;  
     }
     
@@ -63,15 +63,15 @@ public class Middleman {
  
         for (Map.Entry<Integer, Session> entry : clientList.entrySet()) {      
             if (entry.getValue().equals(wsId)) {
-                System.out.println("FOUND: " + entry.getKey() );
+                System.out.println("[APP]FOUND: " + entry.getKey() );
                 found = entry.getKey();
                 break;
             } 
         }
         
         if (found != 0) clientList.remove(found);
-        System.out.println("[Middleman - client removed");
-        System.out.println("[Middleman - clientList] : "+clientList.size());
+        System.out.println("[APP][Middleman - client removed");
+        System.out.println("[APP][Middleman - clientList] : "+clientList.size());
     }
     
     /**
@@ -79,7 +79,7 @@ public class Middleman {
      * @param naturalId Session Id.
      * @return Connection session.
      */
-    public Session getSession(String naturalId) {      
+    public Session getSession(int naturalId) {      
         return clientList.get(naturalId);           
     }
             
@@ -89,7 +89,7 @@ public class Middleman {
      */
     public void registerEvent(String message) {
         
-        System.out.println("[Middleman - NEW EVENT: " + message);
+        System.out.println("[APP][Middleman - NEW EVENT: " + message);
         infoQueue.add(message);
         notificationQueue.add(message);
     }
