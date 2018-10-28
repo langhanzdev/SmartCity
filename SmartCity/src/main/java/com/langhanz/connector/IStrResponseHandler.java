@@ -1,4 +1,4 @@
-package net.iotll.cityos.cosvc.connector.strprotocol;
+package com.langhanz.connector;
 
 import java.util.List;
 /**
