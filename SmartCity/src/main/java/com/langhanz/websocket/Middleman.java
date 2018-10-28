@@ -22,8 +22,9 @@ import javax.websocket.Session;
 @Singleton
 public class Middleman {
     
-    Map<String,Session> clientList = new HashMap<String,Session>();
+    Map<Integer,Session> clientList = new HashMap<Integer,Session>();
     Session client;
+    int ids = 0;
     
     private LinkedList<String> infoQueue = new LinkedList(); 
     private LinkedList<String> notificationQueue = new LinkedList();
@@ -37,11 +38,12 @@ public class Middleman {
      * @return If the add operation was a success.
      */
     public boolean registerNewClient(Session wsId) {
-
-        String naturalId = "001"; // TODO mudar para lista, para nao precisar mais disso
+        
+        ids++;
+        Integer naturalId = ids; 
         System.out.println("[Middleman - register new client] - wsId: "+wsId + " naturalId: " + naturalId );
         
-        if(clientList.isEmpty()){
+        if(clientList.size() < 100){
             clientList.put(naturalId, wsId);
             System.out.println("[Middleman - clientList] : " + clientList.size());
             return true;
@@ -57,9 +59,9 @@ public class Middleman {
      */
     public void unregisterClient(Session wsId){
 
-        String found = null;
+        int found = 0;
  
-        for (Map.Entry<String, Session> entry : clientList.entrySet()) {      
+        for (Map.Entry<Integer, Session> entry : clientList.entrySet()) {      
             if (entry.getValue().equals(wsId)) {
                 System.out.println("FOUND: " + entry.getKey() );
                 found = entry.getKey();
@@ -67,9 +69,9 @@ public class Middleman {
             } 
         }
         
-        if (found != null) clientList.remove(found);
+        if (found != 0) clientList.remove(found);
         System.out.println("[Middleman - client removed");
-        System.out.println("[Middleman - clientList] : 0");
+        System.out.println("[Middleman - clientList] : "+clientList.size());
     }
     
     /**
