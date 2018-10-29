@@ -24,6 +24,8 @@ import javax.websocket.DeploymentException;
 @Singleton
 @Startup
 public class Connector {
+    
+    private WSClient wsClient;
 
     /**
      * @param args the command line arguments
@@ -31,9 +33,9 @@ public class Connector {
      */
     @PostConstruct
     public void start()  {
-        System.out.println("[Middleware] AQUIII");
         
-        WSClient wsClient = new WSClient();
+        
+        wsClient = new WSClient();
         try {
             System.out.println("[Middleware] Try connect...");
 ////            wsClient.connect(new URI("ws://192.168.160.6:8080/cosvc/cp1"));
@@ -50,7 +52,9 @@ public class Connector {
         //while (true) {
         
             //Light
-          //  wsClient.sendStringMessage("REG|001;");
+//            wsClient.sendStringMessage("REG|001;");
+//            wsClient.sendStringMessage("REG|002;");
+//            wsClient.sendStringMessage("REG|003;");
               
 
         //}
@@ -73,6 +77,11 @@ public class Connector {
         }
                 */
                            
+    }
+    
+    
+    public void sendMessage(String msg){
+        wsClient.sendStringMessage(msg);
     }
     
     
