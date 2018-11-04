@@ -32,6 +32,14 @@
     <script type="text/javascript">
         
     function init() {
+        
+        var hoje = new Date();
+	var dia = hoje.getDate(); // Pega o dia atual (0-31)
+	var mes = hoje.getMonth(); // Pega o mes atual (0-11) preste atenção ao manipulá-lo
+	var ano = hoje.getFullYear(); // Pega o ano atual (4 dígitos)
+	var hora = hoje.getHours(); // Pega a hora atual
+	var minutos = hoje.getMinutes(); // Pega os minutos atuais
+	var segundos = hoje.getSeconds(); // Pega os segundos atuais
           
         var projection = new OpenLayers.Projection("EPSG:900913");
         var displayProjection = new OpenLayers.Projection("EPSG:4326");
@@ -126,34 +134,141 @@ var pointFeature = new OpenLayers.Feature.Vector(point, null, style);
           
           
       }
+      
+    function moveRelogio(){
+        momentoAtual = new Date();
+        hora = momentoAtual.getHours();
+        minuto = momentoAtual.getMinutes();
+        segundo = momentoAtual.getSeconds();
+
+        horaImprimivel = hora + " : " + minuto;
+
+        $("#time").html(horaImprimivel);
+
+        setTimeout("moveRelogio()",60000)
+    } 
+    
+    function openNotificationBar() {
+    $("#dvNotificationIcon").hide();
+    $('#dvNotificationsBar').animate({
+        right: "0"
+    });
+}
+
+function closeNotificationBar() {
+    $("#dvNotificationIcon").show();
+    $('#dvNotificationsBar').animate({
+        right: "-400"
+    });
+}
+
+function openInfoBar() {
+    $('#infoBar').animate({
+        left: "0"
+    });
+}
+
+function closeInfoBar() {
+    $('#infoBar').animate({
+        left: "-350"
+    });
+}
     </script>
     </h:head>
-    <h:body onload="init();">
+    <h:body onload="init();moveRelogio();">
        
-        <div id="basicMap"></div>
+        <div id="basicMap" onclick="closeInfoBar();closeNotificationBar();"></div>
         <h:form style="width: 100%;"   prependId="false">  
             
             <p:growl id="messages" showDetail="true" sticky="true" life="3000"/>  
-            <p:menubar >
+            <p:menubar style="height: 25px;">
 
-                <p:menuitem value="Situation Control" url="/index.xhtml" icon="ui-icon-home" />
+                <p:menuitem style="margin-top:-10px;" value="Map" url="/index.xhtml" icon="ui-icon-home" />
+                <p:menuitem style="margin-top:-10px;" value="Groups" url="/index.xhtml" icon="ui-icon-home" />
+                <p:menuitem style="margin-top:-10px;" value="Sector" url="/index.xhtml" icon="ui-icon-home" />
+                <p:menuitem style="margin-top:-10px;" value="Maintanance" url="/index.xhtml" icon="ui-icon-home" />
                 
                 
                 
                 <f:facet name="options">
-                    <h:graphicImage id="logoH" style="height: 25px;margin-bottom: 0; margin-top: 2px;margin-right: 600px;" name="/img/icon.png"/> 
-                    <h:graphicImage id="loader" style="display: none;height: 19px;padding-bottom: 6px;margin-bottom: 0; margin-top: 2px;margin-right: 615px;" name="/img/HuaweiLoader.gif"/> 
-
-                    <p:inputText style="margin-right:10px" placeholder="Search"/>
-                    <p:commandButton type="button" value="Logout" icon="ui-icon-extlink" /> 
+                    <p:menuitem style="margin-top:-10px;" value="asda" icon="fa-bell" />
+                    <span id="time" style="margin-top: -10px;"></span>
+                     
 
                 </f:facet>
 
             </p:menubar>
-            <p:button  onclick="#{mapController.sendMessage()}"  value="AQUI"/>
+            <!--<p:button  onclick="# {mapController.sendMessage()}"  value="AQUI"/>-->
         </h:form>
         
-        <div id="infoBar"></div>
+        <div id="infoBar">
+            <h1>Device Info</h1>
+            <table id="tbInfo">
+                <tr>
+                    <td>Device Type</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Device ID:</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Latitude</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Longitude</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Domain</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Groups</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Sectors</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td></td>
+                </tr>
+            </table>
+            <span onclick="openNotificationBar()" class="infoTitles">Actions</span><br/>
+            <span class="infoTitles">Historical</span>
+            
+            
+        </div>
+        
+        <!-- SIDE BAR NOTIFICATIONS -->
+        <div id="dvNotificationsBar">
+            <div id="dvNotificationBarContent">
+                <h1>Notifications</h1>
+                <br/><br/>
+                <div style="overflow-y: auto;max-height: 90%;">
+                    <h:form>
+                        <h:panelGroup id="commentlist">
+                            <ui:repeat  var="nt" value="# {deviceController.notificationList}" >
+
+                                <div class="dvResultElement">
+                                    <p:outputLabel value="#{nt}"/>
+                                </div>
+
+                            </ui:repeat>
+                        </h:panelGroup>
+                        <p:poll interval="5" update="commentlist" listener="# {deviceController.routineUpdate()}"/>
+                    </h:form>
+                </div>
+            </div>
+            <!-- button close notifications -->
+            <div id="dvBtCloseNotification"  onclick="closeNotificationBar();">
+                <p:graphicImage name="/img/CloseNotifications.png" width="20px"/>
+            </div>
+        </div>
+
         
     
   

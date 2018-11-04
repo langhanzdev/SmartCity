@@ -17,8 +17,13 @@ body{
 }
 
 h1{
-    color: white;
-    font-size: 25px;
+    color: black;
+    font-size: 20px; 
+}
+
+.infoTitles{
+    color: black;
+    font-size: 20px;
 }
 
 #dvResults{
@@ -131,7 +136,7 @@ table{
     width:320px; 
     top:0;
     height:100%;
-    color: white;
+    color: black;
     padding: 10px;
     padding-right: 20px;
     border-radius: 0 10px 10px 0;
@@ -201,7 +206,7 @@ table{
     margin-top: 20px;
     font-size: 14px;
     font-weight: normal;
-    border: #fff solid 2px;
+    border: #000 solid 2px;
     border-collapse: collapse;
 }
 
@@ -209,10 +214,10 @@ table{
     border: 1px solid #dadada;
     /*border-bottom: 1px solid #dadada;
     border-left: 1px solid #dadada;*/
-    color: white;
+    color: black;
     line-height: 1.1em;
     padding: 3px 6px;
-    vertical-align: top;
+    vertical-align: central;
 }
 
 
@@ -220,7 +225,7 @@ table{
     border: 1px solid #dadada;
     /*border-bottom: 1px solid #dadada;
     border-left: 1px solid #dadada;*/
-    color: white;
+    color: black;
     line-height: 1.1em;
     padding: 3px 6px;
     vertical-align: top;
@@ -229,12 +234,12 @@ table{
 #infoBar,#infoBarSC{
     width: 320px;
     height: 92%;
-    background-color: rgba(57, 57, 57, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);/*rgba(57, 57, 57, 0.8);*/
     position: absolute;
     box-shadow: 0 0 8px #000;
     padding: 10px;
     color: #fff;
-    left:-300px;
+    left:0;/*-300px;*/
     font-style: oblique;
 
 }
