@@ -32,7 +32,7 @@ public class Connector {
      * @throws java.lang.InterruptedException
      */
     @PostConstruct
-    public void start()  {
+    public void start() {
         
         
         wsClient = new WSClient();
@@ -40,12 +40,23 @@ public class Connector {
             System.out.println("[Middleware] Try connect...");
 ////            wsClient.connect(new URI("ws://192.168.160.6:8080/cosvc/cp1"));
             wsClient.connect(new URI("ws://localhost:8080/SmartCity-1.0-SNAPSHOT/cp1"));
+            
+            
+            wsClient.sendStringMessage("REG|001;");
+            Thread.sleep(2000);
+            wsClient.sendStringMessage("TESTE 1;");
+            Thread.sleep(2000);
+            wsClient.sendStringMessage("Teste2;");
+            
+            
         } catch (URISyntaxException ex) {
             Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DeploymentException ex) {
             Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex){
+            
         }
         
         

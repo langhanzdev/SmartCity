@@ -251,7 +251,7 @@ function closeInfoBar() {
                 <div style="overflow-y: auto;max-height: 90%;">
                     <h:form>
                         <h:panelGroup id="commentlist">
-                            <ui:repeat  var="nt" value="# {deviceController.notificationList}" >
+                            <ui:repeat  var="nt" value="#{deviceController.notificationList}" >
 
                                 <div class="dvResultElement">
                                     <p:outputLabel value="#{nt}"/>
@@ -259,7 +259,7 @@ function closeInfoBar() {
 
                             </ui:repeat>
                         </h:panelGroup>
-                        <p:poll interval="5" update="commentlist" listener="# {deviceController.routineUpdate()}"/>
+                        <p:poll interval="5" update="commentlist" listener="#{deviceController.updateRoutine()}"/>
                     </h:form>
                 </div>
             </div>
