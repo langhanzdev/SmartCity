@@ -96,13 +96,17 @@
                 });
                 var point3;
                 var pointFeature3;
-                for(i=0;i&lt;10;i++){
-                    
-                    point3 = new OpenLayers.Geometry.Point(-51.19, -30.05).transform(epsg4326, projectTo);
-                    pointFeature3 = new OpenLayers.Feature.Vector(point3,null,style_mark);
-                    vectorLayer.addFeatures(pointFeature3);
+//                for(i=0;i&lt;10;i++){
+                $.get('devices', {action: 0}, function (responseText) {
+//                    alert(responseText);
+                    $.each(responseText, function (index, item) { // Iterate over the JSON array.
+//                        alert(item['latitude']);
+                        point3 = new OpenLayers.Geometry.Point(parseFloat(item['longitude']), parseFloat(item['latitude'])).transform(epsg4326, projectTo);
+                        pointFeature3 = new OpenLayers.Feature.Vector(point3,null,style_mark);
+                        vectorLayer.addFeatures(pointFeature3);
+                    });
                 
-                }
+                });
                 
                 
                 

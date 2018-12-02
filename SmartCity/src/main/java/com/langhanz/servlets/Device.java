@@ -36,11 +36,11 @@ public class Device extends HttpServlet {
         
         List<String> deviceList =  new ArrayList();//ejbFacade.findAll();
         deviceList.add("{\"elemento\": \"1\", \"longitude\": \"-51.21\", \"latitude\": \"-30.08\"}");
-        deviceList.add("{\"elemento\": \"2\"}, \"longitude\": \"-51.23\", \"latitude\": \"-30.10\"}");
-        deviceList.add("{\"elemento\": \"3\"}, \"longitude\": \"-51.25\", \"latitude\": \"-30.12\"}");
-        deviceList.add("{\"elemento\": \"4\"}, \"longitude\": \"-51.27\", \"latitude\": \"-30.14\"}");
-        deviceList.add("{\"elemento\": \"5\"}, \"longitude\": \"-51.29\", \"latitude\": \"-30.16\"}");
-        deviceList.add("{\"elemento\": \"6\"}, \"longitude\": \"-51.31\", \"latitude\": \"-30.18\"}");
+        deviceList.add("{\"elemento\": \"2\", \"longitude\": \"-51.23\", \"latitude\": \"-30.10\"}");
+        deviceList.add("{\"elemento\": \"3\", \"longitude\": \"-51.25\", \"latitude\": \"-30.12\"}");
+        deviceList.add("{\"elemento\": \"4\", \"longitude\": \"-51.27\", \"latitude\": \"-30.14\"}");
+        deviceList.add("{\"elemento\": \"5\", \"longitude\": \"-51.29\", \"latitude\": \"-30.16\"}");
+        deviceList.add("{\"elemento\": \"6\", \"longitude\": \"-51.31\", \"latitude\": \"-30.18\"}");
         String c;
         if(deviceList.isEmpty()){
             c = "[]";
@@ -53,6 +53,8 @@ public class Device extends HttpServlet {
             c+= "]";
 
         }
+        
+        System.out.println("AQUIIII TO NO SERLVET");
        
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
