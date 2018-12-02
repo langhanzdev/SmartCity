@@ -100,9 +100,11 @@
                 $.get('devices', {action: 0}, function (responseText) {
 //                    alert(responseText);
                     $.each(responseText, function (index, item) { // Iterate over the JSON array.
-//                        alert(item['latitude']);
-                        point3 = new OpenLayers.Geometry.Point(parseFloat(item['longitude']), parseFloat(item['latitude'])).transform(epsg4326, projectTo);
+//                        alert(item['id']);
+                        point3 = new OpenLayers.Geometry.Point(parseFloat(item['lon']), parseFloat(item['lat'])).transform(epsg4326, projectTo);
                         pointFeature3 = new OpenLayers.Feature.Vector(point3,null,style_mark);
+                        pointFeature3.id = item['id'];
+                        pointFeature3.type = 0;  
                         vectorLayer.addFeatures(pointFeature3);
                     });
                 
@@ -237,6 +239,28 @@
         
       }//end inti
       
+      function deviceClick(e) {
+    
+            if(e.type == "LUM"){
+                $("#idLuminary").val(e.id);
+//                getDeviceInfo(e.id,0);
+                $('#searchBar').hide();
+                openInfoBarLight();
+            }
+            if(e.type == "MET"){
+                $("#idLuminary").val(e.id);
+//                getDeviceInfo(e.id,1);
+                $('#searchBar').hide();
+                openInfoBarSC();
+            }
+        }
+        
+//        function getDeviceInfo(id,type) {
+////            showLoader();
+//            $.get('devices', {lightid: id, type: type}, function (responseText) {
+//                hideLoader();
+//            });
+//        }
       
       /**** Control click ****/
             OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
@@ -296,6 +320,13 @@
         setTimeout("moveRelogio()",60000)
     } 
     
+    function getDeviceInfo(id,type) {
+//        showLoader();
+        $.get('DeviceOnlyServlet', {id: id, type: type}, function (responseText) {
+//            hideLoader();
+        });
+    }
+    
     function openNotificationBar() {
     $("#dvNotificationIcon").hide();
     $('#dvNotificationsBar').animate({
@@ -310,8 +341,9 @@ function closeNotificationBar() {
     });
 }
 
-function openInfoBar() {
+function openInfoBar(e) {
 //    alert("Open");
+    getDeviceInfo(e.id,e.type)
     $('#infoBar').slideDown("500");
 //    $('#infoBar').animate({
 //        left: "0"
@@ -355,22 +387,24 @@ function closeInfoBar() {
         
         <div id="infoBar" style="display:none;height: 96%;">
             <h1>Device Info</h1>
+            <h:form id="infoBarForm">
+            <p:poll interval="2" update="infoBarForm" process="@none" />
             <table id="tbInfo">
                 <tr>
                     <td>Device Type</td>
-                    <td></td>
+                    <td>#{deviceController.currentDevice.type}</td>
                 </tr>
                 <tr>
                     <td>Device ID:</td>
-                    <td></td>
+                    <td>#{deviceController.currentDevice.id}</td>
                 </tr>
                 <tr>
                     <td>Latitude</td>
-                    <td></td>
+                    <td>#{deviceController.currentDevice.lat}</td>
                 </tr>
                 <tr>
                     <td>Longitude</td>
-                    <td></td>
+                    <td>#{deviceController.currentDevice.lon}</td>
                 </tr>
                 <tr>
                     <td>Domain</td>
@@ -389,6 +423,7 @@ function closeInfoBar() {
                     <td></td>
                 </tr>
             </table>
+            </h:form>
             <span onclick="openNotificationBar()" class="infoTitles">Actions</span><br/>
             <span class="infoTitles">Historical</span>
             

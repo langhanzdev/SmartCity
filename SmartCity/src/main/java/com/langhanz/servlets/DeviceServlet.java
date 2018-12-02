@@ -9,19 +9,27 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.langhanz.smartcity.Device;
+import javax.inject.Inject;
 
 /**
  *
  * @author langhanz
  */
 @WebServlet("/devices/*")
-public class Device extends HttpServlet {
+public class DeviceServlet extends HttpServlet {
 
+    @EJB
+    private com.langhanz.smartcity.DeviceFacade deviceFacade;
+    
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,22 +42,25 @@ public class Device extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        List<String> deviceList =  new ArrayList();//ejbFacade.findAll();
-        deviceList.add("{\"elemento\": \"1\", \"longitude\": \"-51.21\", \"latitude\": \"-30.08\"}");
-        deviceList.add("{\"elemento\": \"2\", \"longitude\": \"-51.23\", \"latitude\": \"-30.10\"}");
-        deviceList.add("{\"elemento\": \"3\", \"longitude\": \"-51.25\", \"latitude\": \"-30.12\"}");
-        deviceList.add("{\"elemento\": \"4\", \"longitude\": \"-51.27\", \"latitude\": \"-30.14\"}");
-        deviceList.add("{\"elemento\": \"5\", \"longitude\": \"-51.29\", \"latitude\": \"-30.16\"}");
-        deviceList.add("{\"elemento\": \"6\", \"longitude\": \"-51.31\", \"latitude\": \"-30.18\"}");
+//        List<String> deviceList =  new ArrayList();//ejbFacade.findAll();
+//        deviceList.add("{\"elemento\": \"1\", \"longitude\": \"-51.21\", \"latitude\": \"-30.08\"}");
+//        deviceList.add("{\"elemento\": \"2\", \"longitude\": \"-51.23\", \"latitude\": \"-30.10\"}");
+//        deviceList.add("{\"elemento\": \"3\", \"longitude\": \"-51.25\", \"latitude\": \"-30.12\"}");
+//        deviceList.add("{\"elemento\": \"4\", \"longitude\": \"-51.27\", \"latitude\": \"-30.14\"}");
+//        deviceList.add("{\"elemento\": \"5\", \"longitude\": \"-51.29\", \"latitude\": \"-30.16\"}");
+//        deviceList.add("{\"elemento\": \"6\", \"longitude\": \"-51.31\", \"latitude\": \"-30.18\"}");
         String c;
+
+        List<Device> deviceList = deviceFacade.findAll();
+
         if(deviceList.isEmpty()){
             c = "[]";
         }else{
             c = "[";
             for(int i=0;i<=deviceList.size()-2;i++){
-                c += deviceList.get(i) + ",";
+                c += deviceList.get(i).toStringJson() + ",";
             }
-            c += deviceList.get(deviceList.size()-1);
+            c += deviceList.get(deviceList.size()-1).toStringJson();
             c+= "]";
 
         }

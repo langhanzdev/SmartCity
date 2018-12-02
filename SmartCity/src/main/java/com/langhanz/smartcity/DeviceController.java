@@ -7,9 +7,12 @@ package com.langhanz.smartcity;
 
 import com.langhanz.websocket.Middleman;
 import java.util.ArrayList;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+
 
 /**
  *
@@ -22,6 +25,10 @@ public class DeviceController {
     private ArrayList<Device> deviceList = new ArrayList<>();
     private ArrayList<String> messageList = new ArrayList<>();
     private ArrayList<String> notificationList = new ArrayList<>();
+    private Device currentDevice;
+    
+    @Inject com.langhanz.smartcity.DeviceFacade devFacade;
+    
     
     @Inject Middleman mid;
     
@@ -58,7 +65,20 @@ public class DeviceController {
     }
     
 
-    
+    public void onSelectDevice(Device device){
+        
+        currentDevice = device;
+        
+        
+    }
+
+    public Device getCurrentDevice() {
+        return currentDevice;
+    }
+
+    public void setCurrentDevice(Device currentDevice) {
+        this.currentDevice = currentDevice;
+    }
     
     
     

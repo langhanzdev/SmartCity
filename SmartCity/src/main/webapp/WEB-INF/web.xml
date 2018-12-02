@@ -19,7 +19,7 @@
     </servlet>
     <servlet>
         <servlet-name>Device</servlet-name>
-        <servlet-class>com.langhanz.servlets.Device</servlet-class>
+        <servlet-class>com.langhanz.servlets.DeviceServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
