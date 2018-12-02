@@ -31,8 +31,101 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         
+        var map;
+            var projection = new OpenLayers.Projection("EPSG:900913");
+            var displayProjection = new OpenLayers.Projection("EPSG:4326");
     function init() {
+        var options = {
+                    projection: projection,
+                    displayProjection: displayProjection,
+                    units: "m",
+                    maxResolution: 156543.0339,
+                    maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
+                            20037508.34, 20037508.34),
+                    crossOriginKeyword: null,
+                    numZoomLevels: 19,
+                    controls: [
+                        new OpenLayers.Control.Navigation(),
+                        //new OpenLayers.Control.PanZoomBar(),
+                        new OpenLayers.Control.Permalink(),
+                        new OpenLayers.Control.ScaleLine(),
+                        //new OpenLayers.Control.SelectFeature(),
+                        new OpenLayers.Control.MousePosition({}),
+                        new OpenLayers.Control.KeyboardDefaults()
+                    ]
+                };
+                
+                //Mapa Online
+                map = new OpenLayers.Map("basicMap", options);
+                map.addLayer(new OpenLayers.Layer.OSM());
+                var layer_style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
+                epsg4326 = new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
+                projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
+
+                var lonLat = new OpenLayers.LonLat(-51.19,-30.05).transform(epsg4326, projectTo);
+
+                var zoom = 15;
+                map.setCenter(lonLat, zoom);
+
+                var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+                
+//                var feature = new OpenLayers.Feature.Vector(
+//                    new OpenLayers.Geometry.Point(-51.19, -30.05).transform(epsg4326, projectTo),
+//                   
+//                    {externalGraphic: 'javax.faces.resource/img/icon.png.xhtml', 
+//                        graphicHeight: 25, 
+//                        graphicWidth: 25, 
+//                        graphicXOffset: 0, graphicYOffset: 0}
+//                );
         
+//                feature.style.externalGraphic = "javax.faces.resource/img/icon.png.xhtml";
+                var i;
+                
+                var style_mark = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
+            
+                style_mark.graphicWidth = 25;
+                style_mark.graphicHeight = 25;
+                style_mark.graphicXOffset = 10; // default is -(style_mark.graphicWidth/2);
+                style_mark.graphicYOffset = -style_mark.graphicHeight;
+                style_mark.externalGraphic = "http://www.iconarchive.com/download/i87035/graphicloads/colorful-long-shadow/Bulb.ico";
+                // title only works in Firefox and Internet Explorer
+                style_mark.title = "this is a test tooltip";
+
+                var vectorLayer = new OpenLayers.Layer.Vector("Simple Geometry", {
+                    style: layer_style
+                });
+                var point3;
+                var pointFeature3;
+                for(i=0;i&lt;10;i++){
+                    
+                    point3 = new OpenLayers.Geometry.Point(-51.19, -30.05).transform(epsg4326, projectTo);
+                    pointFeature3 = new OpenLayers.Feature.Vector(point3,null,style_mark);
+                    vectorLayer.addFeatures(pointFeature3);
+                
+                }
+                
+                
+                
+                
+                map.addLayer(vectorLayer);
+        
+        //Add a selector control to the vectorLayer with popup functions
+                var controls = {
+                    selector: new OpenLayers.Control.SelectFeature(vectorLayer, {onSelect: openInfoBar, onUnselect: closeInfoBar})
+                    , click: new OpenLayers.Control.Click()
+                };
+
+                map.addControl(controls['selector']);
+                controls['selector'].activate();
+
+
+
+                var click = new OpenLayers.Control.Click();
+                map.addControl(click);
+
+                click.activate();
+        
+        /* 
         var hoje = new Date();
 	var dia = hoje.getDate(); // Pega o dia atual (0-31)
 	var mes = hoje.getMonth(); // Pega o mes atual (0-11) preste atenção ao manipulá-lo
@@ -76,12 +169,13 @@
 //            new OpenLayers.Geometry.Point(parseFloat(-51.19,-30.05)).transform(fromProjection, toProjection)
 //            
 //        );
-        map.addLayer(mapnik);
+        map.addLayer(new OpenLayers.Layer.OSM());
+//        map.addLayer(mapnik);
 
 
 
         var markers = new OpenLayers.Layer.Markers( "Markers" );
-        map.addLayer(markers);
+//        map.addLayer(markers);
             
         var lonLat = new OpenLayers.LonLat( -51.19,-30.05 ).transform(
             new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
@@ -98,35 +192,85 @@
          
         
         
-        markers.addMarker(new OpenLayers.Marker(lonLat));
+       // markers.addMarker(new OpenLayers.Marker(lonLat));
         
         map.setCenter(position, zoom );
         map.addLayer(vectorLayer);
-        var point = new OpenLayers.Geometry.Point( -51.19,-30.05);
-var style =  {
-    externalGraphic: 'javax.faces.resources/img/icon.png.xhtml',
-    graphicWidth: 21,
-    graphicHeight: 25,
-    graphicYOffset: -24
-};
-var pointFeature = new OpenLayers.Feature.Vector(point, null, style);
-        vectorLayer.addFeatures(pointFeature);
+//        var point = new OpenLayers.Geometry.Point( -51.19,-30.05);
+//        var style =  {
+//            externalGraphic: 'javax.faces.resources/img/icon.png.xhtml',
+//            graphicWidth: 21,
+//            graphicHeight: 25,
+//            graphicYOffset: -24
+//        };
+        epsg4326 = new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
+        projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
+        var feature = new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.Point( -51.19,-30.05).transform(epsg4326, projectTo),
+                {description: 'LPC'},
+                {externalGraphic: 'javax.faces.resource/img/icon.png.xhtml', graphicHeight: 25, graphicWidth: 25, graphicXOffset: 0, graphicYOffset: 0}
+        );
+//        var pointFeature = new OpenLayers.Feature.Vector(point, null, style);
+//        vectorLayer.addFeatures(pointFeature);
+        vectorLayer.addFeatures(feature);
+        map.addLayer(vectorLayer);
         var s = "";
-                $.get('devices', {action: 0}, function (responseText) {
+//                $.get('devices', {action: 0}, function (responseText) {
+//
+//                    $.each(responseText, function (index, item) { // Iterate over the JSON array.
+//                        alert(index);
+//                        var feature = new OpenLayers.Feature.Vector(
+//                            new OpenLayers.Geometry.Point(parseFloat(item['longitude']), parseFloat(item['latitude'])).transform(fromProjection, toProjection)
+//                        );
+//                        
+//                        vectorLayer.addFeatures(feature);
+//                    });
+//                });
+//        
+        */
+       
+       
+        
+      }//end inti
+      
+      
+      /**** Control click ****/
+            OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
+                defaultHandlerOptions: {
+                    'single': true,
+                    'double': false,
+                    'pixelTolerance': 0,
+                    'stopSingle': false,
+                    'stopDouble': false
+                },
+                initialize: function (options) {
+                    this.handlerOptions = OpenLayers.Util.extend(
+                            {}, this.defaultHandlerOptions
+                            );
+                    OpenLayers.Control.prototype.initialize.apply(
+                            this, arguments
+                            );
+                    this.handler = new OpenLayers.Handler.Click(
+                            this, {
+                                'click': this.trigger
+                            }, this.handlerOptions
+                            );
+                    
+                },
+                trigger: function (e) {
+                    
+                    var lonlat = map.getLonLatFromPixel(e.xy);
+                    lonlat1 = new OpenLayers.LonLat(lonlat.lon, lonlat.lat).transform(projection, displayProjection);
+                    //alert("Lon: "+lonlat1.lon + "  Lat: " +lonlat1.lat);
+                     
+//                    PF('dlg2').show();
+//                    
+//                    $("#latitude").val(lonlat1.lat);
+//                    $("#longitude").val(lonlat1.lon);
 
-                    $.each(responseText, function (index, item) { // Iterate over the JSON array.
-                        alert(index);
-                        var feature = new OpenLayers.Feature.Vector(
-                            new OpenLayers.Geometry.Point(parseFloat(item['longitude']), parseFloat(item['latitude'])).transform(fromProjection, toProjection)
-                        );
-                        
-                        vectorLayer.addFeatures(feature);
-                    });
-                });
-        
-        
-        
-      }
+                }
+
+            });
       
       
       function openCloseToolBar(){
@@ -163,21 +307,25 @@ function closeNotificationBar() {
 }
 
 function openInfoBar() {
-    $('#infoBar').animate({
-        left: "0"
-    });
+//    alert("Open");
+    $('#infoBar').slideDown("500");
+//    $('#infoBar').animate({
+//        left: "0"
+//    });
 }
 
 function closeInfoBar() {
-    $('#infoBar').animate({
-        left: "-350"
-    });
+//    alert("close");
+    $('#infoBar').slideUp("500");
+//    $('#infoBar').animate({
+//        left: "-350"
+//    });
 }
     </script>
     </h:head>
     <h:body onload="init();moveRelogio();">
        
-        <div id="basicMap" onclick="closeInfoBar();closeNotificationBar();"></div>
+        <div id="basicMap"></div>
         <h:form style="width: 100%;"   prependId="false">  
             
             <p:growl id="messages" showDetail="true" sticky="true" life="3000"/>  
@@ -201,7 +349,7 @@ function closeInfoBar() {
             <!--<p:button  onclick="# {mapController.sendMessage()}"  value="AQUI"/>-->
         </h:form>
         
-        <div id="infoBar" style="display:none;">
+        <div id="infoBar" style="display:none;height: 96%;">
             <h1>Device Info</h1>
             <table id="tbInfo">
                 <tr>
