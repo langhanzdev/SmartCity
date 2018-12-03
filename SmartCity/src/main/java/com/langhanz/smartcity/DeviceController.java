@@ -74,19 +74,23 @@ public class DeviceController {
     
     public void updateRoutine(){
         
-        notificationList = messageList;
+//        notificationList = messageList;
         System.out.println("[APP] lista "+notificationList.size());
-        Random rand = new Random();
-        int val = rand.nextInt(100);
-        if(val > 20 && val < 40){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO: Notification Received","A Device sent a message.")); 
-        }
-        if(val >= 40 && val < 90){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "WARNING: Notification Received.","A Device sent warning message.")); 
-        }
-        if(val > 90){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR: Notification Received.","A Device sent error message.")); 
-        }
+        notificationList.add("TESTE");
+//        Random rand = new Random();
+//        int val = rand.nextInt(100);
+//        if(val > 0 && val < 40){
+//            notificationList.add("INFO: Notification Received, a Device sent a message.");
+////            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO: Notification Received","A Device sent a message.")); 
+//        }
+//        if(val >= 40 && val < 90){
+//            notificationList.add("WARNING: Notification Received. A Device sent warning message.");
+////            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "WARNING: Notification Received.","A Device sent warning message.")); 
+//        }
+//        if(val > 90){
+//            notificationList.add("ERROR: Notification Received. A Device sent error message.");
+////            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "ERROR: Notification Received.","A Device sent error message.")); 
+//        }
     }
 
     public ArrayList<String> getNotificationList() {
@@ -169,25 +173,33 @@ public class DeviceController {
         Axis yAxis = lineModel1.getAxis(AxisType.Y);
         yAxis.setMin(-20);
         yAxis.setMax(50);
+        
+        lineModel2 = initLinearModel();
+        lineModel2.setTitle("Linear Chart");
+        lineModel2.setStacked(false);
+        //lineModel1.setLegendPosition("e");
+        yAxis = lineModel2.getAxis(AxisType.Y);
+        yAxis.setMin(0);
+        yAxis.setMax(1);
        
  
-        lineModel2 = initCategoryModel();
-        lineModel2.setTitle("Category Chart");
-        lineModel2.setLegendPosition("e");
-        lineModel2.setShowPointLabels(true);
-        lineModel2.getAxes().put(AxisType.X, new CategoryAxis("Years"));
-        yAxis = lineModel2.getAxis(AxisType.Y);
-        yAxis.setLabel("Births");
-        yAxis.setMin(0);
-        yAxis.setMax(200);
- 
-        zoomModel = initLinearModel();
-        zoomModel.setTitle("Zoom");
-        zoomModel.setZoom(true);
-        zoomModel.setLegendPosition("e");
-        yAxis = zoomModel.getAxis(AxisType.Y);
-        yAxis.setMin(0);
-        yAxis.setMax(10);
+//        lineModel2 = initCategoryModel();
+//        lineModel2.setTitle("Category Chart");
+//        lineModel2.setLegendPosition("e");
+//        lineModel2.setShowPointLabels(true);
+//        lineModel2.getAxes().put(AxisType.X, new CategoryAxis("Years"));
+//        yAxis = lineModel2.getAxis(AxisType.Y);
+//        yAxis.setLabel("Births");
+//        yAxis.setMin(0);
+//        yAxis.setMax(200);
+// 
+//        zoomModel = initLinearModel();
+//        zoomModel.setTitle("Zoom");
+//        zoomModel.setZoom(true);
+//        zoomModel.setLegendPosition("e");
+//        yAxis = zoomModel.getAxis(AxisType.Y);
+//        yAxis.setMin(0);
+//        yAxis.setMax(10);
     }
  
     private LineChartModel initLinearModel() {
@@ -213,6 +225,19 @@ public class DeviceController {
     
     public void commandGetTemperature(){
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Command Get Temperature.","Command sent successfully.")); 
+    }
+    
+    public void commandSetLightOff(int id){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Command Set Light OFF.","Command sent successfully.")); 
+        devFacade.deviceList.get(id-1).setValue("OFF");
+        currentDevice.setValue("OFF");
+        
+    }
+    
+    public void commandSetLightOn(int id){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Command Set Light ON.","Command sent successfully.")); 
+        devFacade.deviceList.get(id-1).setValue("ON");
+        currentDevice.setValue("ON");
     }
     
     

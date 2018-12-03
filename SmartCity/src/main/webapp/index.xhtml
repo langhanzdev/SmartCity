@@ -432,9 +432,9 @@ function closeInfoBarMet() {
         </h:form>
         
         <div id="infoBar" style="position:absolute;display:none;height: 96%;">
-            <h1>Device Info</h1>
+            <span style="font-size: 36px;color: black;align-content: center;">Device Info</span>
             <h:form id="infoBarForm">
-            <p:poll interval="2" update="infoBarForm" process="@none" />
+            <p:poll interval="2" update="infoBarForm,linegraphicLight" process="@none" />
             <table id="tbInfo">
                 
                 <tr>
@@ -466,11 +466,18 @@ function closeInfoBarMet() {
                     <td>#{deviceController.currentDevice.address}</td>
                 </tr>
             </table>
-            </h:form>
-            <span onclick="openNotificationBar()" class="infoTitles">Actions</span><br/>
+            <span class="infoTitles">Status:</span><br/>
+            <span class="infoTitles">#{deviceController.currentDevice.value}</span><br/>
+            <span class="infoTitles">Actions</span><br/>
+            <p:commandButton style="width: 100%;" id="btOff" value="OFF" process="@form" >
+                <p:ajax event="click" update="msgs" listener="#{deviceController.commandSetLightOff(deviceController.currentDevice.id)}" />
+            </p:commandButton>
+            <p:commandButton style="width: 100%;" id="btOn" value="ON" process="@form" >
+                <p:ajax event="click" update="msgs" listener="#{deviceController.commandSetLightOn(deviceController.currentDevice.id)}" />
+            </p:commandButton>
             <span class="infoTitles">Historical</span>
-            
-            
+            <p:chart id="linegraphicLight" type="line"  model="#{deviceController.lineModel2}" style="height:150px;width:300px;margin-top: -20px;"/>
+            </h:form>
         </div>
         
         
@@ -533,12 +540,12 @@ function closeInfoBarMet() {
         <!-- SIDE BAR NOTIFICATIONS -->
         <div id="dvNotificationsBar">
             <div id="dvNotificationBarContent">
-                <h:form><p:commandButton  onclick="closeNotificationBar();" icon="pi pi-star" style="margin-right:0px;" title="Close"/></h:form>
+                <h:form><p:commandButton  onclick="closeNotificationBar();" icon="fa-close" style="margin-left:-45px;" title="Close"/></h:form>
                 <h1>Notifications</h1>
                 <br/><br/>
                 <div style="overflow-y: auto;max-height: 90%;">
                     <h:form>
-                        
+                        <p:poll interval="5" update="commentlist" listener="#{deviceController.updateRoutine()}"/>
                         <h:panelGroup id="commentlist">
                             <ui:repeat  var="nt" value="#{deviceController.notificationList}" >
 
@@ -548,14 +555,12 @@ function closeInfoBarMet() {
 
                             </ui:repeat>
                         </h:panelGroup>
-                        <p:poll interval="5" update="commentlist,msgs" listener="#{deviceController.updateRoutine()}"/>
+                        
                     </h:form>
                 </div>
             </div>
             <!-- button close notifications -->
-            <div id="dvBtCloseNotification"  onclick="closeNotificationBar();">
-                <p:graphicImage name="/img/CloseNotifications.png" width="20px"/>
-            </div>
+            
         </div>
 
         
