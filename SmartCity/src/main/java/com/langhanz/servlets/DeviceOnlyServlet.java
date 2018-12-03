@@ -41,12 +41,12 @@ public class DeviceOnlyServlet extends HttpServlet {
             throws ServletException, IOException {
         
         int id = Integer.parseInt(request.getParameter("id"));
-        int type = Integer.parseInt(request.getParameter("type"));
+//        int type = Integer.parseInt(request.getParameter("type"));
         
         
         Device d;
         d = deviceFacade.find(id);
-        System.out.println("DEVICE "+d);
+        System.out.println("DEVICE "+d.getId());
         dc.onSelectDevice(d);
         
     }

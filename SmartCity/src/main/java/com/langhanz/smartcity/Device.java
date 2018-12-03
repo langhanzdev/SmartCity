@@ -20,8 +20,10 @@ public class Device {
     private double lat;
     private String address;
     private ArrayList<String> values;
+    private String domain;
+    private int groups;
 
-    public Device(int id, String value, double lon, double lat, String address, int type) {
+    public Device(int id, String value, double lon, double lat, String address, int type, String domain, int groups) {
         this.id = id;
         this.value = value;
         this.lon = lon;
@@ -29,6 +31,8 @@ public class Device {
         this.address = address;
         this.type = type;
         this.values = new ArrayList<>();
+        this.domain = domain;
+        this.groups = groups;
     }
     
     
@@ -82,11 +86,38 @@ public class Device {
     }
     
     public void setNewValue(String v){
+        if(values.size() > 9){
+            values.remove(0);
+        }
         values.add(v);
         setValue(value);
     }
+
+    public ArrayList<String> getValues() {
+        return values;
+    }
+
+    public void setValues(ArrayList<String> values) {
+        this.values = values;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public int getGroups() {
+        return groups;
+    }
+
+    public void setGroups(int groups) {
+        this.groups = groups;
+    }
     
     public String toStringJson(){
-        return "{\"id\":\""+id+"\",\"value\":\""+value+"\",\"lon\":\""+lon+"\",\"lat\":\""+lat+"\",\"type\":\""+type+"\"}";
+        return "{\"id\":\""+id+"\",\"value\":\""+value+"\",\"lon\":\""+lon+"\",\"lat\":\""+lat+"\",\"type\":\""+type+"\",\"domain\":\""+domain+"\",\"groups\":\""+groups+"\"}";
     }
 }

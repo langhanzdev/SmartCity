@@ -200,7 +200,7 @@ table{
     padding: 10px;
 }
 
-#tbInfo,#tbInfoSC,.LpcElement{
+#tbInfo,#tbInfoMet,.LpcElement{
     width: 100%;
     margin: 0;
     margin-top: 20px;
@@ -210,7 +210,7 @@ table{
     border-collapse: collapse;
 }
 
-#tbInfo td,#tbInfoSC td,.LpcElement td{
+#tbInfo td,#tbInfoMet td,.LpcElement td{
     border: 1px solid #dadada;
     /*border-bottom: 1px solid #dadada;
     border-left: 1px solid #dadada;*/
@@ -231,7 +231,7 @@ table{
     vertical-align: top;
 }
 
-#infoBar,#infoBarSC{
+#infoBar,#infoBarMet{
     width: 320px;
     height: 92%;
     background-color: rgba(255, 255, 255, 0.8);/*rgba(57, 57, 57, 0.8);*/
